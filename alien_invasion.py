@@ -35,7 +35,6 @@ class AlienInvasion:
             self.ship.update()
             self._update_bullet()
 
-
     def _check_events(self):
         '''Respond to keypresses and mouse events.'''
         for event in pygame.event.get():
@@ -71,11 +70,6 @@ class AlienInvasion:
             new_bullet = Bullet(self)
             self.bullets.add(new_bullet)
 
-    def _create_fleet(self):
-        '''Create the fleet of aliens.'''
-        alien = Alien(self)
-        self.aliens.add(alien)
-
     def _update_bullet(self):
         '''Update position of bullets and get rid of old bullets.'''
         # Update bullet positions.
@@ -85,6 +79,24 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
+
+    def _create_fleet(self):
+        '''Create the fleet of aliens.'''
+        # Create an alien and find the number of aliens in a row.
+        # Spacing between each alien is equal to one alien width.
+        alien = Alien(self)
+        alien_width = alien.rect.width
+        available_space_x = self.settings.screen_width - (2 * alien_width)
+        number_aliens_x = available_space_x // (2 * alien_width)
+
+        # Create the first row of aliens.
+        for alien_number in range(number_aliens_x):
+            # Create the first row of aliens.
+            alien = Alien(self)
+            alien.x = alien_width + 2 * alien_width * alien_number
+            alien.rect.x = alien.x
+            self.aliens.add(alien)
+
 
     def _update_screen(self):
         '''update images on the screen, and flip to the new sceen.'''
