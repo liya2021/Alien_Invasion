@@ -4,6 +4,8 @@ from settings import Settings
 from ship import Ship
 from bullet import Bullet
 from alien import Alien
+from star import Star
+from random import randint
 
 
 class AlienInvasion:
@@ -24,8 +26,10 @@ class AlienInvasion:
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
+        self.stars = pygame.sprite.Group()
 
         self._create_fleet()
+        self._create_stars()
 
     def run_game(self):
         '''Start the main loop for the game.'''
@@ -108,6 +112,17 @@ class AlienInvasion:
                 # Create the first row of aliens.
                 self._create_alien(alien_number, row_number)
 
+    def _create_star(self):
+        star = Star(self)
+        star.rect.x = randint(0, 2000)
+        star.rect.y = randint(0, 2000)
+        self.stars.add(star)
+
+    def _create_stars(self):
+        for row_number in range(0, randint(10, 20)):
+            for column_number in range(0, randint(10,15)):
+                self._create_star()
+
     def _update_screen(self):
         '''update images on the screen, and flip to the new sceen.'''
         self.screen.fill(self.settings.bg_color)
@@ -115,11 +130,10 @@ class AlienInvasion:
         for bullet in self.bullets.sprites():
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
+        self.stars.draw(self.screen)
 
         pygame.display.flip()
         # Make the most recently drawn screen visible.
-
-
 
 
 if __name__ == '__main__':
